@@ -15,8 +15,19 @@ def checkout():
     # Mock checkout logic
     amount = 100.0 # Mock amount
     
+
+    payment_service_url = os.environ.get('PAYMENT_SERVICE_URL', 'http://payment-service:5003')
+    auth_service_url = os.environ.get('AUTH_SERVICE_URL', 'http://auth-service:5001')
+
+    # Check Auth Service
+    try:
+        auth_response = requests.get(f'{auth_service_url}/health')
+        if auth_response.status_code != 200:
+             return jsonify({'error': 'Auth service unhealthy'}), 503
+    except requests.exceptions.RequestException:
+        return jsonify({'error': 'Auth service unreachable'}), 503
+
     start_time = time.time()
-    payment_service_url = os.environ.get('PAYMENT_SERVICE_URL', 'http://localhost:5003')
     try:
         payment_response = requests.post(f'{payment_service_url}/pay', json={'amount': amount})
         payment_data = payment_response.json()
@@ -26,7 +37,7 @@ def checkout():
     
     response_time = end_time - start_time
 
-    if response_time > 5:
+    if response_time > 4:
         return jsonify({'error': 'Payment processing timed out', 'details': 'Response time: ' + str(response_time)}), 504
     
     return jsonify({

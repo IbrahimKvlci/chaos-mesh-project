@@ -1,0 +1,19 @@
+apiVersion: chaos-mesh.org/v1alpha1
+kind: HTTPChaos
+metadata:
+  name: product-price-patch
+  namespace: chaos-project
+spec:
+  mode: all
+  selector:
+    labelSelectors:
+      app: product-service
+  target: Response
+  port: 5002
+  method: GET
+  path: /products/1
+  patch:
+    body:
+      type: JSON
+      value: '{"id": 1, "name": "Laptop", "price": 0, "replaced": true}'
+  duration: "5m"

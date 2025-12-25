@@ -1,4 +1,5 @@
 from flask import Flask, jsonify, request
+import time
 
 app = Flask(__name__)
 
@@ -14,8 +15,9 @@ def login():
     password = data.get('password')
     
     if username == 'admin' and password == 'password':
-        return jsonify({'token': 'mock-token-12345', 'message': 'Login successful'}), 200
-    return jsonify({'message': 'Invalid credentials'}), 401
+        return jsonify({'token': 'mock-token-12345', 'message': 'Login successful', 'timestamp': time.time()}), 200
+    return jsonify({'message': 'Invalid credentials', 'timestamp': time.time()}), 401
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5001)

@@ -1,0 +1,14 @@
+apiVersion: chaos-mesh.org/v1alpha1
+kind: PodChaos
+metadata:
+  name: pod-kill-auth
+  namespace: chaos-project
+spec:
+  action: pod-failure
+  mode: one                 
+  selector:
+    namespaces:
+      - chaos-project
+    labelSelectors:
+      app: auth-service
+  duration: "30s"   

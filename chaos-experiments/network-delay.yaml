@@ -1,0 +1,18 @@
+apiVersion: chaos-mesh.org/v1alpha1
+kind: NetworkChaos
+metadata:
+  name: payment-network-delay
+  namespace: chaos-project
+spec:
+  action: delay
+  mode: all
+  selector:
+    namespaces:
+      - chaos-project
+    labelSelectors:
+      app: payment-service
+  delay:
+    latency: "5000ms"
+    correlation: "100"
+    jitter: "100ms"
+  duration: "5m"

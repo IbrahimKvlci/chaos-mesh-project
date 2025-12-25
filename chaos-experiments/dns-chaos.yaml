@@ -1,0 +1,16 @@
+apiVersion: chaos-mesh.org/v1alpha1
+kind: DNSChaos
+metadata:
+  name: dns-random-fail
+  namespace: chaos-project
+spec:
+  action: random          
+  mode: all
+  selector:
+    namespaces:
+      - chaos-project
+    labelSelectors:
+      app: frontend 
+  patterns:
+    - "auth-service*"     
+  duration: "5m"
